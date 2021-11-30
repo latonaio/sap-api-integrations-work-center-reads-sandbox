@@ -2,13 +2,13 @@ package sap_api_output_formatter
 
 import (
 	"encoding/json"
-	"sap-api-integrations-material-stock-reads/SAP_API_Caller/responses"
+	"sap-api-integrations-work-center-reads/SAP_API_Caller/responses"
 
 	"github.com/latonaio/golang-logging-library/logger"
 )
 
-func ConvertToMaterialStock(raw []byte, l *logger.Logger) *MaterialStock {
-	pm := &responses.MaterialStock{}
+func ConvertToWorkCenter(raw []byte, l *logger.Logger) *WorkCenter {
+	pm := &responses.WorkCenter{}
 	err := json.Unmarshal(raw, pm)
 	if err != nil {
 		l.Error(err)
@@ -23,11 +23,22 @@ func ConvertToMaterialStock(raw []byte, l *logger.Logger) *MaterialStock {
 	}
 	data := pm.D.Results[0]
 
-	return &MaterialStock{
-		Material:            data.Material,
-		Plant:               data.Plant,
-		StorageLocation:     data.StorageLocation,
-		Batch:               data.ValidityStartDate,
-		ToMaterialStock:     data.ToMaterialStock,
+	return &WorkCenter{
+		WorkCenterInternalID         data.WorkCenterInternalID,
+		WorkCenterTypeCode           data.WorkCenterTypeCode,
+		WorkCenter                   data.WorkCenter,
+		WorkCenterDesc               data.WorkCenter_desc,
+		Plant                        data.Plant,
+		WorkCenterCategoryCode       data.WorkCenterCategoryCode,
+		WorkCenterResponsible        data.WorkCenterResponsible,
+		SupplyArea                   data.SupplyArea,
+		WorkCenterUsage              data.WorkCenterUsage,
+		MatlCompIsMarkedForBackflush data.MatlCompIsMarkedForBackflush,
+		WorkCenterLocation           data.WorkCenterLocation,
+		CapacityInternalID           data.CapacityInternalID,
+		CapacityCategoryCode         data.CapacityCategoryCode,
+		ValidityStartDate            data.ValidityStartDate,
+		ValidityEndDate              data.ValidityEndDate,
+		WorkCenterIsToBeDeleted      data.WorkCenterIsToBeDeleted,
 	}
 }
