@@ -14,3 +14,23 @@ sap-api-integrations-work-center-reads は、主にエッジコンピューテ�
 
 ## クラウド環境での利用  
 sap-api-integrations-work-center-reads は、外部システムがクラウド環境である場合にSAPと統合するときにおいても、利用可能なように設計されています。  
+
+## 本レポジトリ が 対応する API サービス
+sap-api-integrations-work-center-reads が対応する APIサービス は、次のものです。
+
+* APIサービス概要説明 URL: https://api.sap.com/api/OP_WORKCENTER_0001/overview  
+* APIサービス名(=baseURL): api_work_center/srvd_a2x/sap/workcenter/0001
+
+## 本レポジトリ に 含まれる API名
+sap-api-integrations-work-center-reads には、次の API をコールするためのリソースが含まれています。  
+
+* WorkCenterCapacity(WorkCenterInternalID='{WorkCenterInternalID}',WorkCenterTypeCode='{WorkCenterTypeCode}',CapacityCategoryAllocation='{CapacityCategoryAllocation}',CapacityInternalID='{CapacityInternalID}')/_Header（作業区マスタ）
+
+## API への 値入力条件 の 初期値
+sap-api-integrations-work-center-reads において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  
+
+### SDC レイアウト
+
+* inoutSDC.WorkCenter.WorkCenterInternalID（作業区内部ID）
+* inoutSDC.WorkCenter.WorkCenterTypeCode（作業区タイプ）
+* inoutSDC.WorkCenter.ValidityEndDate（有効終了日）

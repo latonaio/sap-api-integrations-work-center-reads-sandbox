@@ -75,7 +75,7 @@ type SDC struct {
 		ValidityEndDate              string `json:"ValidityEndDate"`
 		WorkCenterIsToBeDeleted      bool   `json:"WorkCenterIsToBeDeleted"`
 	} `json:"WorkCenter"`
-	APISchema      string `json:"api_schema"`
-	WorkCenter     string `json:"work_center_code"`
-	Deleted        bool   `json:"deleted"`
+	APISchema       string `json:"api_schema"`
+	WorkCenterCode  string `json:"work_center_code"`
+	Deleted         bool   `json:"deleted"`
 }
