@@ -1,22 +1,7 @@
 {
-	"WorkCenterInternalID": "10000188",
-	"WorkCenterTypeCode": "A",
-	"WorkCenter": "1000-001",
-	"WorkCenter_desc": "Test Work Center",
-	"Plant": "1000",
-	"WorkCenterCategoryCode": "0003",
-	"WorkCenterResponsible": "001",
-	"SupplyArea": "",
-	"WorkCenterUsage": "001",
-	"MatlCompIsMarkedForBackflush": true,
-	"WorkCenterLocation": "1000",
-	"CapacityInternalID": "10000198",
-	"CapacityCategoryCode": "002",
-	"ValidityStartDate": "20211109",
-	"ValidityEndDate": "",
-	"WorkCenterIsToBeDeleted": false,
-	"cursor": "/Users/kyotatashiro/go/src/sap-api-integrations-work-center-reads/SAP_API_Caller/caller.go#L220",
+	"cursor": "/Users/latona2/bitbucket/sap-api-integrations-work-center-reads/SAP_API_Caller/caller.go#L46",
 	"function": "sap-api-integrations-work-center-reads/SAP_API_Caller.(*SAPAPICaller).WorkCenter",
 	"level": "INFO",
-	"time": "2021-11-20T18:28:36.143833+09:00"
+	"message": "&{WorkCenterInternalID:10000000 WorkCenterTypeCode:A WorkCenter:ASSEMBLY WorkCenterDesc: Plant:1010 WorkCenterCategoryCode:0001 WorkCenterResponsible:001 SupplyArea: WorkCenterUsage:009 MatlCompIsMarkedForBackflush:false WorkCenterLocation: CapacityInternalID:10000000 CapacityCategoryCode:001 ValidityStartDate:2016-06-24 ValidityEndDate:9999-12-31 WorkCenterIsToBeDeleted:false}",
+	"time": "2021-12-09T15:17:10.997107+09:00"
 }

@@ -12,12 +12,11 @@ func main() {
 	fr := sap_api_input_reader.NewFileReader()
 	inoutSDC := fr.ReadSDC("./Inputs//SDC_Work_Center_sample.json")
 	caller := sap_api_caller.NewSAPAPICaller(
-        "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata4/sap/", l,  // Work Center は URL の フォーマットが若干異なる ※要検証
-    )
+		"https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata4/sap/", l, // Work Center は URL の フォーマットが若干異なる ※要検証
+	)
 
-    caller.AsyncGetWorkCenter(
-        inoutSDC.WorkCenter.WorkCenterInternalID,
-        inoutSDC.WorkCenter.WorkCenterTypeCode,
-        inoutSDC.WorkCenter.ValidityEndDate,
-    )
+	caller.AsyncGetWorkCenter(
+		inoutSDC.WorkCenter.WorkCenterInternalID,
+		inoutSDC.WorkCenter.WorkCenterTypeCode,
+	)
 }

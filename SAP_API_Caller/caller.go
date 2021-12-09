@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	sap_api_output_formatter "sap-api-integrations-work-center-reads/SAP_API_Output_Formatter"
 	"strings"
 	"sync"
 
 	"github.com/latonaio/golang-logging-library/logger"
+	"golang.org/x/xerrors"
 )
 
 type SAPAPICaller struct {
@@ -24,47 +26,57 @@ func NewSAPAPICaller(baseUrl string, l *logger.Logger) *SAPAPICaller {
 	}
 }
 
-func (c *SAPAPICaller) AsyncGetWorkCenter(WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate string) {
+func (c *SAPAPICaller) AsyncGetWorkCenter(workCenterInternalID, workCenterTypeCode string) {
 	wg := &sync.WaitGroup{}
 
 	wg.Add(1)
-	go func() {
-		c.WorkCenter(WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate)
+	func() {
+		c.WorkCenter(workCenterInternalID, workCenterTypeCode)
 		wg.Done()
 	}()
 	wg.Wait()
 }
 
-func (c *SAPAPICaller) WorkCenter(WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate string) {
-	res, err := c.callWorkCenterSrvAPIRequirement("WorkCenterCapacity(WorkCenterInternalID='{WorkCenterInternalID}',WorkCenterTypeCode='{WorkCenterTypeCode}',CapacityCategoryAllocation='{CapacityCategoryAllocation}',CapacityInternalID='{CapacityInternalID}')/_Header", WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate)
+func (c *SAPAPICaller) WorkCenter(workCenterInternalID, workCenterTypeCode string) {
+	data, err := c.callWorkCenterSrvAPIRequirementWorkCenter(fmt.Sprintf("WorkCenterHeader(WorkCenterInternalID='%s',WorkCenterTypeCode='%s')", workCenterInternalID, workCenterTypeCode), workCenterInternalID, workCenterTypeCode)
 	if err != nil {
 		c.log.Error(err)
 		return
 	}
-
-	c.log.Info(res)
-
+	c.log.Info(data)
 }
 
-func (c *SAPAPICaller) callWorkCenterSrvAPIRequirement(api, WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate string) ([]byte, error) {
+func (c *SAPAPICaller) callWorkCenterSrvAPIRequirementWorkCenter(api, workCenterInternalID, workCenterTypeCode string) (*sap_api_output_formatter.WorkCenter, error) {
 	url := strings.Join([]string{c.baseURL, "api_work_center/srvd_a2x/sap/workcenter/0001", api}, "/")
 	req, _ := http.NewRequest("GET", url, nil)
 
-	params := req.URL.Query()
-	// params.Add("$select", "WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate")
-	params.Add("$filter", fmt.Sprintf("WorkCenterInternalID eq '%s' and WorkCenterTypeCode eq '%s' and ValidityEndDate eq '%s'", WorkCenterInternalID, WorkCenterTypeCode, ValidityEndDate))
-	req.URL.RawQuery = params.Encode()
+	c.setHeaderAPIKeyAccept(req)
+	// c.getQueryWithWorkCenter(req, workCenterInternalID, workCenterTypeCode)
 
-	req.Header.Set("APIKey", c.apiKey)
-	req.Header.Set("Accept", "application/json")
-
-	client := new(http.Client)
-	resp, err := client.Do(req)
+	resp, err := new(http.Client).Do(req)
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("API request error: %w", err)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, xerrors.Errorf("API status code %d. API request failed", resp.StatusCode)
+	}
 
 	byteArray, _ := ioutil.ReadAll(resp.Body)
-	return byteArray, nil
+	data, err := sap_api_output_formatter.ConvertToWorkCenter(byteArray, c.log)
+	if err != nil {
+		return nil, xerrors.Errorf("convert error: %w", err)
+	}
+	return data, nil
+}
+
+func (c *SAPAPICaller) setHeaderAPIKeyAccept(req *http.Request) {
+	req.Header.Set("APIKey", c.apiKey)
+	req.Header.Set("Accept", "application/json")
+}
+
+func (c *SAPAPICaller) getQueryWithWorkCenter(req *http.Request, workCenterInternalID, workCenterTypeCode string) {
+	params := req.URL.Query()
+	params.Add("$filter", fmt.Sprintf("WorkCenterInternalID eq '%s' and WorkCenterTypeCode eq '%s'", workCenterInternalID, workCenterTypeCode))
+	req.URL.RawQuery = params.Encode()
 }

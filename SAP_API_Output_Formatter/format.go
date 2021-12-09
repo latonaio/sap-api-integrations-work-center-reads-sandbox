@@ -5,40 +5,32 @@ import (
 	"sap-api-integrations-work-center-reads/SAP_API_Caller/responses"
 
 	"github.com/latonaio/golang-logging-library/logger"
+	"golang.org/x/xerrors"
 )
 
-func ConvertToWorkCenter(raw []byte, l *logger.Logger) *WorkCenter {
+func ConvertToWorkCenter(raw []byte, l *logger.Logger) (*WorkCenter, error) {
 	pm := &responses.WorkCenter{}
-	err := json.Unmarshal(raw, pm)
+	err := json.Unmarshal(raw, &pm)
 	if err != nil {
-		l.Error(err)
-		return nil
+		return nil, xerrors.Errorf("cannot convert to WorkCenter. unmarshal error: %w", err)
 	}
-	if len(pm.D.Results) == 0 {
-		l.Error("Result data is not exist.")
-		return nil
-	}
-	if len(pm.D.Results) > 1 {
-		l.Error("raw data has too many Results. %d Results exist. expected only 1 Result. Use the first of Results array", len(pm.D.Results))
-	}
-	data := pm.D.Results[0]
 
 	return &WorkCenter{
-		WorkCenterInternalID         data.WorkCenterInternalID,
-		WorkCenterTypeCode           data.WorkCenterTypeCode,
-		WorkCenter                   data.WorkCenter,
-		WorkCenterDesc               data.WorkCenter_desc,
-		Plant                        data.Plant,
-		WorkCenterCategoryCode       data.WorkCenterCategoryCode,
-		WorkCenterResponsible        data.WorkCenterResponsible,
-		SupplyArea                   data.SupplyArea,
-		WorkCenterUsage              data.WorkCenterUsage,
-		MatlCompIsMarkedForBackflush data.MatlCompIsMarkedForBackflush,
-		WorkCenterLocation           data.WorkCenterLocation,
-		CapacityInternalID           data.CapacityInternalID,
-		CapacityCategoryCode         data.CapacityCategoryCode,
-		ValidityStartDate            data.ValidityStartDate,
-		ValidityEndDate              data.ValidityEndDate,
-		WorkCenterIsToBeDeleted      data.WorkCenterIsToBeDeleted,
-	}
+		WorkCenterInternalID:         pm.WorkCenterInternalID,
+		WorkCenterTypeCode:           pm.WorkCenterTypeCode,
+		WorkCenter:                   pm.WorkCenter,
+		WorkCenterDesc:               pm.WorkCenterDesc,
+		Plant:                        pm.Plant,
+		WorkCenterCategoryCode:       pm.WorkCenterCategoryCode,
+		WorkCenterResponsible:        pm.WorkCenterResponsible,
+		SupplyArea:                   pm.SupplyArea,
+		WorkCenterUsage:              pm.WorkCenterUsage,
+		MatlCompIsMarkedForBackflush: pm.MatlCompIsMarkedForBackflush,
+		WorkCenterLocation:           pm.WorkCenterLocation,
+		CapacityInternalID:           pm.CapacityInternalID,
+		CapacityCategoryCode:         pm.CapacityCategoryCode,
+		ValidityStartDate:            pm.ValidityStartDate,
+		ValidityEndDate:              pm.ValidityEndDate,
+		WorkCenterIsToBeDeleted:      pm.WorkCenterIsToBeDeleted,
+	}, nil
 }
