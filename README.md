@@ -33,4 +33,3 @@ sap-api-integrations-work-center-reads において、API への値入力条件�
 
 * inoutSDC.WorkCenter.WorkCenterInternalID（作業区内部ID）
 * inoutSDC.WorkCenter.WorkCenterTypeCode（作業区タイプ）
-* inoutSDC.WorkCenter.ValidityEndDate（有効終了日）
