@@ -29,7 +29,80 @@ sap-api-integrations-work-center-reads には、次の API をコールするた
 ## API への 値入力条件 の 初期値
 sap-api-integrations-work-center-reads において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  
 
-### SDC レイアウト
+## SDC レイアウト
 
 * inoutSDC.WorkCenter.WorkCenterInternalID（作業区内部ID）
 * inoutSDC.WorkCenter.WorkCenterTypeCode（作業区タイプ）
+
+## SAP API Business Hub における API サービス の バージョン と バージョン におけるデータレイアウトの相違
+
+SAP API Business Hub における API サービス のうちの 殆どの API サービス のBASE URLのフォーマットは、"API_(リポジトリ名)_SRV" であり、殆どの API サービス 間 の データレイアウトは統一されています。   
+従って、Latona および AION における リソースにおいても、データレイアウトが統一されています。    
+一方、本レポジトリ に関わる API である Work Center のサービスは、BASE URLのフォーマットが他のAPIサービスと異なります。      
+その結果、本レポジトリ内の一部のAPIのデータレイアウトが、他のAPIサービスのものと異なっています。  
+
+#### BASE URLが "API_(リポジトリ名)_SRV" のフォーマットである API サービス の データレイアウト（=responses）  
+BASE URLが "API_{リポジトリ名}_SRV" のフォーマットであるAPIサービスのデータレイアウト（=responses）は、例えば、次の通りです。  
+```
+type ToProductionOrderItem struct {
+	D struct {
+		Results []struct {
+			Metadata struct {
+				ID   string `json:"id"`
+				URI  string `json:"uri"`
+				Type string `json:"type"`
+			} `json:"__metadata"`
+			ManufacturingOrder             string      `json:"ManufacturingOrder"`
+			ManufacturingOrderItem         string      `json:"ManufacturingOrderItem"`
+			ManufacturingOrderCategory     string      `json:"ManufacturingOrderCategory"`
+			ManufacturingOrderType         string      `json:"ManufacturingOrderType"`
+			IsCompletelyDelivered          bool        `json:"IsCompletelyDelivered"`
+			Material                       string      `json:"Material"`
+			ProductionPlant                string      `json:"ProductionPlant"`
+			Plant                          string      `json:"Plant"`
+			MRPArea                        string      `json:"MRPArea"`
+			QuantityDistributionKey        string      `json:"QuantityDistributionKey"`
+			MaterialGoodsReceiptDuration   string      `json:"MaterialGoodsReceiptDuration"`
+			StorageLocation                string      `json:"StorageLocation"`
+			Batch                          string      `json:"Batch"`
+			InventoryUsabilityCode         string      `json:"InventoryUsabilityCode"`
+			GoodsRecipientName             string      `json:"GoodsRecipientName"`
+			UnloadingPointName             string      `json:"UnloadingPointName"`
+			MfgOrderItemPlndDeliveryDate   string      `json:"MfgOrderItemPlndDeliveryDate"`
+			MfgOrderItemActualDeliveryDate string      `json:"MfgOrderItemActualDeliveryDate"`
+			ProductionUnit                 string      `json:"ProductionUnit"`
+			MfgOrderItemPlannedTotalQty    string      `json:"MfgOrderItemPlannedTotalQty"`
+			MfgOrderItemPlannedScrapQty    string      `json:"MfgOrderItemPlannedScrapQty"`
+			MfgOrderItemGoodsReceiptQty    string      `json:"MfgOrderItemGoodsReceiptQty"`
+			MfgOrderItemActualDeviationQty string      `json:"MfgOrderItemActualDeviationQty"`
+		} `json:"results"`
+	} `json:"d"`
+}
+
+```
+
+#### BASE URL が "api_work_center/srvd_a2x/sap/workcenter/0001" である Work Center の APIサービス の データレイアウト（=responses）  
+BASE URL が "api_work_center/srvd_a2x/sap/workcenter/0001" である Work Center の APIサービス の データレイアウト（=responses）  
+
+```
+type WorkCenter struct {
+	WorkCenterInternalID         string `json:"WorkCenterInternalID"`
+	WorkCenterTypeCode           string `json:"WorkCenterTypeCode"`
+	WorkCenter                   string `json:"WorkCenter"`
+	WorkCenterDesc               string `json:"WorkCenter_desc"`
+	Plant                        string `json:"Plant"`
+	WorkCenterCategoryCode       string `json:"WorkCenterCategoryCode"`
+	WorkCenterResponsible        string `json:"WorkCenterResponsible"`
+	SupplyArea                   string `json:"SupplyArea"`
+	WorkCenterUsage              string `json:"WorkCenterUsage"`
+	MatlCompIsMarkedForBackflush bool   `json:"MatlCompIsMarkedForBackflush"`
+	WorkCenterLocation           string `json:"WorkCenterLocation"`
+	CapacityInternalID           string `json:"CapacityInternalID"`
+	CapacityCategoryCode         string `json:"CapacityCategoryCode"`
+	ValidityStartDate            string `json:"ValidityStartDate"`
+	ValidityEndDate              string `json:"ValidityEndDate"`
+	WorkCenterIsToBeDeleted      bool   `json:"WorkCenterIsToBeDeleted"`
+}
+
+```
+このように、BASE URLが "API_(リポジトリ名)_SRV" のフォーマットである API サービス の データレイアウトと、 Work Center の データレイアウトは、D、Results、Metadata の配列構造を持っているか持っていないかという点が異なります。  
