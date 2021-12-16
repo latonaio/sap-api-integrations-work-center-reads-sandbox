@@ -26,14 +26,22 @@ func NewSAPAPICaller(baseUrl string, l *logger.Logger) *SAPAPICaller {
 	}
 }
 
-func (c *SAPAPICaller) AsyncGetWorkCenter(workCenterInternalID, workCenterTypeCode string) {
+func (c *SAPAPICaller) AsyncGetWorkCenter(workCenterInternalID, workCenterTypeCode string, accepter []string) {
 	wg := &sync.WaitGroup{}
+	wg.Add(len(accepter))
+	for _, fn := range accepter {
+		switch fn {
+		case "WorkCenter":
+			func() {
+				c.WorkCenter(workCenterInternalID, workCenterTypeCode)
+				wg.Done()
+			}()
 
-	wg.Add(1)
-	func() {
-		c.WorkCenter(workCenterInternalID, workCenterTypeCode)
-		wg.Done()
-	}()
+		default:
+			wg.Done()
+		}
+	}
+
 	wg.Wait()
 }
 

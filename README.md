@@ -34,6 +34,59 @@ sap-api-integrations-work-center-reads において、API への値入力条件�
 * inoutSDC.WorkCenter.WorkCenterInternalID（作業区内部ID）
 * inoutSDC.WorkCenter.WorkCenterTypeCode（作業区タイプ）
 
+#### SAP API Bussiness Hub の API の選択的コール
+
+Latona および AION の SAP 関連リソースでは、Inputs フォルダ下の sample.json の accepter に取得したいデータの種別（＝APIの種別）を入力し、指定することができます。  
+なお、同 accepter にAll(もしくは空白)の値を入力することで、全データ（＝全APIの種別）をまとめて取得することができます。  
+
+* sample.jsonの記載例(1)  
+
+accepter において 下記の例のように、データの種別（＝APIの種別）を指定します。  
+ここでは、"WorkCenter" が指定されています。    
+  
+```
+	"api_schema": "sap.s4.beh.workcenter.v1.WorkCenter.Created.v1",
+	"accepter": ["WorkCenter"],
+	"work_center_code": "10000000",
+	"deleted": false
+```
+  
+* 全データを取得する際のsample.jsonの記載例(2)  
+
+全データを取得する場合、sample.json は以下のように記載します。  
+
+```
+	"api_schema": "sap.s4.beh.workcenter.v1.WorkCenter.Created.v1",
+	"accepter": ["All"],
+	"work_center_code": "10000000",
+	"deleted": false
+```
+ 指定されたデータ種別のコール
+
+accepter における データ種別 の指定に基づいて SAP_API_Caller 内の caller.go で API がコールされます。  
+caller.go の func() 毎 の 以下の箇所が、指定された API をコールするソースコードです。  
+
+```
+func (c *SAPAPICaller) AsyncGetWorkCenter(workCenterInternalID, workCenterTypeCode string, accepter []string) {
+	wg := &sync.WaitGroup{}
+	wg.Add(len(accepter))
+	for _, fn := range accepter {
+		switch fn {
+		case "WorkCenter":
+			func() {
+				c.WorkCenter(workCenterInternalID, workCenterTypeCode)
+				wg.Done()
+			}()
+
+		default:
+			wg.Done()
+		}
+	}
+
+	wg.Wait()
+}
+```
+
 ## SAP API Business Hub における API サービス の バージョン と バージョン におけるデータレイアウトの相違
 
 SAP API Business Hub における API サービス のうちの 殆どの API サービス のBASE URLのフォーマットは、"API_(リポジトリ名)_SRV" であり、殆どの API サービス 間 の データレイアウトは統一されています。   

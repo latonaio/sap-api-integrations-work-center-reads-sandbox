@@ -15,8 +15,16 @@ func main() {
 		"https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata4/sap/", l, // Work Center は URL の フォーマットが若干異なる ※要検証
 	)
 
+	accepter := inoutSDC.Accepter
+	if len(accepter) == 0 || accepter[0] == "All" {
+		accepter = []string{
+			"WorkCenter",
+		}
+	}
+
 	caller.AsyncGetWorkCenter(
 		inoutSDC.WorkCenter.WorkCenterInternalID,
 		inoutSDC.WorkCenter.WorkCenterTypeCode,
+		accepter,
 	)
 }
