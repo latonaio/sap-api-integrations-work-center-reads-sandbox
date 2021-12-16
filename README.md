@@ -34,7 +34,7 @@ sap-api-integrations-work-center-reads において、API への値入力条件�
 * inoutSDC.WorkCenter.WorkCenterInternalID（作業区内部ID）
 * inoutSDC.WorkCenter.WorkCenterTypeCode（作業区タイプ）
 
-#### SAP API Bussiness Hub の API の選択的コール
+## SAP API Bussiness Hub の API の選択的コール
 
 Latona および AION の SAP 関連リソースでは、Inputs フォルダ下の sample.json の accepter に取得したいデータの種別（＝APIの種別）を入力し、指定することができます。  
 なお、同 accepter にAll(もしくは空白)の値を入力することで、全データ（＝全APIの種別）をまとめて取得することができます。  
@@ -61,7 +61,7 @@ accepter において 下記の例のように、データの種別（＝APIの�
 	"work_center_code": "10000000",
 	"deleted": false
 ```
- 指定されたデータ種別のコール
+## 指定されたデータ種別のコール
 
 accepter における データ種別 の指定に基づいて SAP_API_Caller 内の caller.go で API がコールされます。  
 caller.go の func() 毎 の 以下の箇所が、指定された API をコールするソースコードです。  
