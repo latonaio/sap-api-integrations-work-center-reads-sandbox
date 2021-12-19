@@ -162,7 +162,7 @@ type WorkCenter struct {
 
 ## Output  
 本マイクロサービスでは、[golang-logging-library](https://github.com/latonaio/golang-logging-library) により、以下のようなデータがJSON形式で出力されます。  
-以下の sample.json の例は、SAP 購買情報 の 一般データ が取得された結果の JSON の例です。  
+以下の sample.json の例は、SAP 作業区 の 一般データ が取得された結果の JSON の例です。  
 以下の項目のうち、"WorkCenterInternalID" ～ "WorkCenterIsToBeDeleted" は、/SAP_API_Output_Formatter/type.go 内 の Type Product {} による出力結果です。"cursor" ～ "time"は、golang-logging-library による 定型フォーマットの出力結果です。  
 
 ```
