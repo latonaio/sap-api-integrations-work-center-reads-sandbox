@@ -161,19 +161,35 @@ type WorkCenter struct {
 このように、BASE URLが "API_(リポジトリ名)_SRV" のフォーマットである API サービス の データレイアウトと、 Work Center の データレイアウトは、D、Results、Metadata の配列構造を持っているか持っていないかという点が異なります。  
 
 ## Output  
-本マイクロサービスでは、[golang-logging-library](https://github.com/latonaio/golang-logging-library) により、以下のようなデータがJSON形式で出力されます。  
+本マイクロサービスでは、[golang-logging-library-for-sap](https://github.com/latonaio/golang-logging-library-for-sap) により、以下のようなデータがJSON形式で出力されます。  
 以下の sample.json の例は、SAP 作業区 の 一般データ が取得された結果の JSON の例です。  
-以下の項目のうち、"WorkCenterInternalID" ～ "WorkCenterIsToBeDeleted" は、/SAP_API_Output_Formatter/type.go 内 の Type WorkCenter {} による出力結果です。"cursor" ～ "time"は、golang-logging-library による 定型フォーマットの出力結果です。  
+以下の項目のうち、"WorkCenterInternalID" ～ "WorkCenterIsToBeDeleted" は、/SAP_API_Output_Formatter/type.go 内 の Type WorkCenter {} による出力結果です。"cursor" ～ "time"は、golang-logging-library-for-sap による 定型フォーマットの出力結果です。  
 
 ```
 {
-	"cursor": "/Users/latona2/bitbucket/sap-api-integrations-work-center-reads/SAP_API_Caller/caller.go#L46",
+	"cursor": "/Users/latona2/bitbucket/sap-api-integrations-work-center-reads/SAP_API_Caller/caller.go#L54",
 	"function": "sap-api-integrations-work-center-reads/SAP_API_Caller.(*SAPAPICaller).WorkCenter",
 	"level": "INFO",
-	"message": "&{WorkCenterInternalID:10000000 WorkCenterTypeCode:A WorkCenter:ASSEMBLY WorkCenterDesc: Plant:1010 WorkCenterCategoryCode:0001 WorkCenterResponsible:001 SupplyArea: WorkCenterUsage:009 MatlCompIsMarkedForBackflush:false WorkCenterLocation: CapacityInternalID:10000000 CapacityCategoryCode:001 ValidityStartDate:2016-06-24 ValidityEndDate:9999-12-31 WorkCenterIsToBeDeleted:false}",
-	"time": "2021-12-09T15:17:10.997107+09:00"
+	"message": {
+		"WorkCenterInternalID": "10000000",
+		"WorkCenterTypeCode": "A",
+		"WorkCenter": "ASSEMBLY",
+		"WorkCenter_desc": "",
+		"Plant": "1010",
+		"WorkCenterCategoryCode": "0001",
+		"WorkCenterResponsible": "001",
+		"SupplyArea": "",
+		"WorkCenterUsage": "009",
+		"MatlCompIsMarkedForBackflush": false,
+		"WorkCenterLocation": "",
+		"CapacityInternalID": "10000000",
+		"CapacityCategoryCode": "001",
+		"ValidityStartDate": "2016-06-24",
+		"ValidityEndDate": "9999-12-31",
+		"WorkCenterIsToBeDeleted": false
+	},
+	"time": "2022-01-28T12:59:40+09:00"
 }
-
 ```
 
 
